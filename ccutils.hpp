@@ -10,6 +10,9 @@
  *
  */
 
+// Comment this line if you do not wnat to print debug information
+#define FIREBUG
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +33,6 @@
 
 #ifndef BUGNOFREE_UTIL_HPP
 #define BUGNOFREE_UTIL_HPP
-
-// #define FIREBUG
 
 int get_suffix(char *path, char suffix[NAME_MAX]);
 int get_parentdir(char *path, char parentdir[PATH_MAX]);
@@ -58,6 +59,7 @@ int get_barename(char *path, char barename[NAME_MAX]);
  *     [+] <Tue Aug 28 09:36:01 2018>|</path/to/src/program.c>.<func>#lineno
  *     I am from China.
  */
+
 #define FLOC "<%s>.<%s>#%d\n"
 #define LOC __FILE__, __func__, __LINE__
 void logmsg(FILE * stream, const char * format, ...) {
