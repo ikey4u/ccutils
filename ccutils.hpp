@@ -15,12 +15,13 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // getenv
 #include <string.h>
 #include <time.h>
 #include <stdarg.h> // va_list
 #include <limits.h> // INT_MAX
 #include <math.h>
+
 
 #define MAX_FMT_SIZE  0x256
 
@@ -31,6 +32,12 @@
 #ifndef  PATH_MAX
 #   define PATH_MAX        4096
 #endif
+
+// Linux
+// opendir, DIR ...
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h> // mkdir
 
 #ifndef BUGNOFREE_UTIL_HPP
 #define BUGNOFREE_UTIL_HPP
@@ -285,5 +292,33 @@ int get_suffix(char *path, char suffix[NAME_MAX]) {
             return suffixlen;
         }
     }
+}
+
+/*
+ * Create a directory `dpath`.
+ *
+ * Return:
+ *  1: the directory is existed
+ *  0: success
+ * -1: failed with unknown error
+ */
+int newdir(const char *dpath) {
+    DIR *dir = opendir(dpath);
+    int err = 0;
+    if(dir == NULL) {
+        if(mkdir(dpath, 0770) == 0) {
+            logmsg(0, FLOC"Create %s successfully!\n", LOC, dpath);
+            err = 0;
+        } else {
+            logmsg(stderr, FLOC"Create %s failed!\n", LOC, dpath);
+            closedir(dir);
+            err = -1;
+        }
+    } else {
+        closedir(dir);
+        logmsg(stderr, FLOC"Directory %s is existed!\n", LOC, dpath);
+        err = 1;
+    }
+    return err;
 }
 #endif
