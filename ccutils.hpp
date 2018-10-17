@@ -20,6 +20,7 @@
 #include <time.h>
 #include <stdarg.h> // va_list
 #include <limits.h> // INT_MAX
+#include <math.h>
 
 #define MAX_FMT_SIZE  0x256
 
